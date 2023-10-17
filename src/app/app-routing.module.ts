@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {RouteConstant} from "./constant/route.constant";
-import {ResultatTemplateComponent} from "./component/resultat-template/resultat-template.component";
+import {HomeComponent} from "./component/home/home.component";
 
 const routes: Routes = [
-  { path: RouteConstant.HOME, component: ResultatTemplateComponent},
+  { path: RouteConstant.HOME, component: HomeComponent},
 ];
 
 @NgModule({
