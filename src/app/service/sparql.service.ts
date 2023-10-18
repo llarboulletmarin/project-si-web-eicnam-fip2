@@ -18,9 +18,6 @@ export class SparqlService {
           query,
           format: 'json',
         },
-        headers: {
-          'User-Agent': 'Votre nom d\'utilisateur ou nom d\'application',
-        },
       });
 
       return response.data;
