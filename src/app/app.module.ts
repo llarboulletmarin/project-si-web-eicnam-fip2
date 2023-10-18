@@ -7,13 +7,15 @@ import { ResultatTemplateComponent } from './component/resultat-template/resulta
 import { NavbarComponent } from './component/navbar/navbar.component';
 import { HomeComponent } from './component/home/home.component';
 import {NgOptimizedImage} from "@angular/common";
+import { SearchComponent } from './component/search/search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ResultatTemplateComponent,
     NavbarComponent,
-    HomeComponent
+    HomeComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,
