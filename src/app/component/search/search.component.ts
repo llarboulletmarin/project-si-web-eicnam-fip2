@@ -7,7 +7,8 @@ import {SparqlService} from "../../service/sparql.service";
 })
 export class SearchComponent {
 
-  result: any;
+  genreLabel: string[] = [];
+  genreID: string[] = [];
 
   constructor(private sparqlService: SparqlService) {}
 
@@ -21,8 +22,8 @@ export class SearchComponent {
     `;
 
     this.sparqlService.queryWikidata(query).then((data) => {
-      console.log(data);
-      this.result = data.results.bindings.map((binding: any) => binding.genreLabel.value);
+      this.genreLabel = data.results.bindings.map((binding: any) => binding.genreLabel.value);
+      this.genreID = data.results.bindings.map((binding: any) => binding.genre.value);
     });
 
   }
