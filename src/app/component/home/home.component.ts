@@ -43,8 +43,7 @@ export class HomeComponent implements OnInit {
         return {
           song: binding.songLabel.value,
           artist: binding.firstArtistLabel.value,
-          spotify: binding.IDpotify.value,
-          youtube: binding.IDYoutube.value
+          spotify: binding.IDpotify.value
         }
       });
       this.random_song = this.result[Math.floor(Math.random() * this.result.length)];
