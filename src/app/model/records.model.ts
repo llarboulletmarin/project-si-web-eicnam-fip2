@@ -5,5 +5,7 @@ export class RecordsModel {
   artistId: string = '';
   artist: string = '';
   spotify: string = '';
+  countryOfOrigin: string = '';
+  publicationDate: string = '';
 
 }

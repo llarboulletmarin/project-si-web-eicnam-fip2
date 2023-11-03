@@ -18,37 +18,64 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     const query = `
-      SELECT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDpotify)
+      SELECT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDpotify) ?countryOfOriginLabel ?publicationDate
       WHERE {
         ?song wdt:P31 wd:Q7366.
         ?song wdt:P175 ?artist.
         ?song wdt:P2207 ?spotify.
+
+        OPTIONAL {
+          ?song wdt:P495 ?countryOfOrigin.
+        }
+        OPTIONAL {
+          ?song wdt:P577 ?publicationDate.
+        }
+
         ?artist rdfs:label ?artistLabel.
         FILTER(LANGMATCHES(LANG(?artistLabel), "en"))
+
         SERVICE wikibase:label {
           bd:serviceParam wikibase:language "en".
         }
       }
-      GROUP BY ?song ?songLabel
+      GROUP BY ?song ?songLabel ?countryOfOriginLabel ?publicationDate
     `;
 
     this.sparqlService.queryWikidata(query).then((data) => {
       this.records = data.results.bindings.map((binding: any) => {
+        const songId = binding.song ? binding.song.value : null;
+        const song = binding.songLabel ? binding.songLabel.value : null;
+        const artistId = binding.firstArtist ? binding.firstArtist.value : null;
+        const artist = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
+        const spotify = binding.IDpotify ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDpotify.value) : null;
+        const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
+        const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
         return {
-          songId: binding.song.value,
-          song: binding.songLabel.value,
-          artistId: binding.firstArtist.value,
-          artist: binding.firstArtistLabel.value,
-          spotify: this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDpotify.value)
+          songId: songId,
+          song: song,
+          artistId: artistId,
+          artist: artist,
+          spotify: spotify,
+          countryOfOrigin: countryOfOrigin,
+          publicationDate: publicationDate,
         }
       });
       this.recordsFiltered = data.results.bindings.map((binding: any) => {
+        const songId = binding.song ? binding.song.value : null;
+        const song = binding.songLabel ? binding.songLabel.value : null;
+        const artistId = binding.firstArtist ? binding.firstArtist.value : null;
+        const artist = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
+        const spotify = binding.IDpotify ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDpotify.value) : null;
+        const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
+        const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
         return {
-          songId: binding.song.value,
-          song: binding.songLabel.value,
-          artistId: binding.firstArtist.value,
-          artist: binding.firstArtistLabel.value,
-          spotify: this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDpotify.value)
+          songId: songId,
+          song: song,
+          artistId: artistId,
+          artist: artist,
+          spotify: spotify,
+          countryOfOrigin: countryOfOrigin,
+          publicationDate: publicationDate,
         }
       });
 

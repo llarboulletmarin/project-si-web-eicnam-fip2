@@ -21,8 +21,10 @@
     </div>
     <div class="container w-50" *ngIf="recordSelected.song">
       <div class="container w-100 mt-4">
-          <h3>{{recordSelected.song}}</h3>
-          <h4>{{recordSelected.artist}}</h4>
+        <h3>{{recordSelected.song}}</h3>
+        <h4>{{recordSelected.artist}}</h4>
+        <p>{{recordSelected?.countryOfOrigin}}</p>
+        <p>{{recordSelected?.publicationDate | date : 'dd/MM/yyyy'}}</p>
           <div class="d-flex justify-content-start mt-4" *ngIf="recordSelected.spotify">
             <iframe [src]="recordSelected.spotify"
                     width="300"
