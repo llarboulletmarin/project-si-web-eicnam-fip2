@@ -1,0 +1,54 @@
+<div class="d-flex flex-column m-4 justify-content-center">
+  <p class="text-center"> Découvrez le monde infini de la musique. <br> Parcourez l'ensemble des titres disponibles par genre, langue ou encore artiste. <br> Bonne recherche avec LS MUSIC.
+  </p>
+</div>
+
+<div class="container w-30 ">
+      <br>
+      <h1>Parcourez par genre</h1>
+      <br>
+      <div class="container">
+        <div class="row justify-content-center">
+          <div *ngFor="let genre of genres" class="col-2">
+                <div class="card" (click)="handleGenreCardClick(genre.genreLabel)" style="width: 200px; height: 200px; text-align: center;">
+                  <a class="button" [routerLink]="'/' + RouteConstant.DISPLAYGENRE" [queryParams]="{ genreLabel: genre.genreLabel }"> {{genre.genreLabel}} </a>
+                    <div class="card-body text-center">
+                      <h5 class="card-title mt-5">{{ genre.genreLabel }}</h5>
+                    </div>
+                </div>
+          </div>
+        </div>
+      </div>
+</div>
+ 
+<div class="container w-30 ">
+    <h1 style="margin-top: 20px">Parcourez par artiste</h1>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-2" *ngFor="let r of artisteLabel">
+              <div class="card" style="width: 200px; height: 200px; text-align: center;" (click)="handlePerformerCardClick(r)">
+                  <div class="card-body text-center">
+                  <h5 class="card-title mt-5">{{ r }}</h5>
+                  </div>
+              </div>
+      </div>
+    </div>
+</div>
+
+<div class="container w-30">
+  <br>
+  <h1> Parcourez les nouveautés</h1>
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-2" *ngFor="let r of musiqueLabel">
+            <div class="card" style="width: 200px; height: 200px; text-align: center;" (click)="handleNewSongsCardClick(r)">
+                <div class="card-body text-center">
+                <h5 class="card-title mt-5">{{ r }}</h5>
+                </div>
+            </div>
+    </div>
+  </div>
+</div>
+
+
+  
