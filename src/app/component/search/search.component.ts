@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { isNull } from 'cypress/types/lodash';
 import {SparqlService} from "../../service/sparql.service";
 
 @Component({

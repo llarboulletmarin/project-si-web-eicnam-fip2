@@ -9,6 +9,7 @@ import { HomeComponent } from './component/home/home.component';
 import {NgOptimizedImage} from "@angular/common";
 import { SearchComponent } from './component/search/search.component';
 import { ExploreComponent } from './component/explore/explore.component';
+import { DisplayGenreComponent } from './component/display-genre/display-genre.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { ExploreComponent } from './component/explore/explore.component';
     NavbarComponent,
     HomeComponent,
     SearchComponent,
-    ExploreComponent
+    ExploreComponent,
+    DisplayGenreComponent
   ],
   imports: [
     BrowserModule,

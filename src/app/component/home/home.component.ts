@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { isNull } from 'cypress/types/lodash';
 import {SparqlService} from "../../service/sparql.service";
 
 @Component({
