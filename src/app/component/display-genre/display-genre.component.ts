@@ -16,6 +16,7 @@ export class DisplayGenreComponent {
 
 
   selectGenreId: string = '';
+  songLabel: string = '';
 
   constructor(private sparqlService: SparqlService, private route: ActivatedRoute) {}
 
@@ -40,20 +41,25 @@ export class DisplayGenreComponent {
 
         const dynamicID = genre?.genreId;
         
+        console.log(dynamicID)
+
         const query = `
-        SELECT ?artiste ?artisteLabel
+        SELECT ?song ?songLabel
         WHERE {
-          VALUES ?artiste {
-            wd:Q642477  # Booba
-            wd:Q1744     # Madonna
-            wd:Q185828     # Daft Punk
-            wd:Q55641    # Spice Girls
-            wd:Q17305712 #Burna Boy
-          }
-          ?artiste rdfs:label ?artisteLabel.
-          FILTER(LANGMATCHES(LANG(?artisteLabel), "fr"))
+          ?song wdt:P31 wd:Q7366.
+          ?song wdt:P136 wd:${dynamicID}.
+          ?song rdfs:label ?songLabel.
+          FILTER (LANG(?songLabel) = "fr")
+        }
+        LIMIT 10
         }    
         `
+        this.sparqlService.queryWikidata(query).then((data) => {
+          console.log(data);
+          this.songLabel = data.results.bindings.map((binding: any) => binding.songLabel.value);
+        });
+
+
       }))
     
   }

@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import {SparqlService} from "../../service/sparql.service";
 import { ActivatedRoute } from '@angular/router';
 import {RouteConstant} from "../../constant/route.constant";
-import { isNull } from 'cypress/types/lodash';
 
 @Component({
   selector: 'app-explore',
