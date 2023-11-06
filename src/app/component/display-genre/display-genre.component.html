@@ -1,1 +1,40 @@
-<p>It works</p>
+
+<div class="container w-75">
+    <div class="row">
+        <h1>{{ genreLabel }}</h1>
+        <div [ngClass]="{'container w-100': !recordSelected.song, 'container w-50': recordSelected.song}">
+          <table class="table table-hover mt-4">
+            <thead>
+            <tr>
+              <th>Titre</th>
+              <th>Artiste</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let r of records" (click)="selectRecord(r)" [ngClass]="{'table-active': r.song === recordSelected.song}">
+              <td>{{r.song}}</td>
+              <td>{{r.artist}}</td>
+              <td></td>
+            </tr>
+            </tbody>
+          </table>
+      </div>
+
+      <div class="container w-50" *ngIf="recordSelected.song">
+        <div class="container w-100 mt-4">
+          <h3>{{recordSelected.song}}</h3>
+          <h4>{{recordSelected.artist}}</h4>
+          <p>{{recordSelected.countryOfOrigin}}</p>
+          <p>{{recordSelected.publicationDate | date : 'dd/MM/yyyy'}}</p>
+            <div class="d-flex justify-content-start mt-4" *ngIf="recordSelected.spotify">
+              <iframe [src]="recordSelected.spotify"
+                      width="300"
+                      height="80"
+                      frameborder="0"
+                      allowtransparency="false"
+                      allow="encrypted-media">
+              </iframe>
+            </div>
+  
+        </div>
+      </div>

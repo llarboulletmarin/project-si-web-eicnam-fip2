@@ -13,7 +13,7 @@
                 <div class="card" (click)="handleGenreCardClick(genre.genreLabel)" style="width: 200px; height: 200px; text-align: center;">
                   <a class="button" [routerLink]="'/' + RouteConstant.DISPLAYGENRE" [queryParams]="{ genreLabel: genre.genreLabel }"> {{genre.genreLabel}} </a>
                     <div class="card-body text-center">
-                      <h5 class="card-title mt-5">{{ genre.genreLabel }}</h5>
+                      <button> {{ genre.genreLabel }}</button>
                     </div>
                 </div>
           </div>

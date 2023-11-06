@@ -1,5 +1,5 @@
 import { BindingPipe } from '@angular/compiler';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {SparqlService} from "../../service/sparql.service";
 import { ActivatedRoute } from '@angular/router';
 import {RouteConstant} from "../../constant/route.constant";
@@ -9,7 +9,7 @@ import {RouteConstant} from "../../constant/route.constant";
   templateUrl: './explore.component.html',
 })
 
-export class ExploreComponent {
+export class ExploreComponent implements OnInit{
 
   protected readonly RouteConstant = RouteConstant;
 
@@ -20,6 +20,8 @@ export class ExploreComponent {
   genreId: string[] = [];
 
   genres: { genreLabel: string, genreId: string }[] = [];
+
+  genreSelected: string ='';
 
   // genres: GenreModel[] = [];
 
@@ -40,7 +42,7 @@ export class ExploreComponent {
       VALUES ?genreId {
         wd:Q6010  # Rap
         wd:Q211756 # Dance-pop
-        wd:Q8341 # Jazz
+        wd:Q188450 # Jazz
         wd:Q131272 # Soul
         wd:Q138020 #hip hop français
       }
@@ -116,11 +118,12 @@ export class ExploreComponent {
       });
   }
 
-  handleGenreCardClick(genre: string) {
-    
+  handleGenreCardClick(genreLabel: string) {
+
   }  
   
   handlePerformerCardClick(genre: string) {
+
 
   }
 
