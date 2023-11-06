@@ -10,6 +10,7 @@ import {NgOptimizedImage} from "@angular/common";
 import { SearchComponent } from './component/search/search.component';
 import { ExploreComponent } from './component/explore/explore.component';
 import { DisplayGenreComponent } from './component/display-genre/display-genre.component';
+import { DisplayArtistComponent } from './component/display-artist/display-artist.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { DisplayGenreComponent } from './component/display-genre/display-genre.c
     HomeComponent,
     SearchComponent,
     ExploreComponent,
-    DisplayGenreComponent
+    DisplayGenreComponent,
+    DisplayArtistComponent
   ],
   imports: [
     BrowserModule,

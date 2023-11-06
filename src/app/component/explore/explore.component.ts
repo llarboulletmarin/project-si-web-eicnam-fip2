@@ -13,20 +13,15 @@ export class ExploreComponent implements OnInit{
 
   protected readonly RouteConstant = RouteConstant;
 
-
-
-  //isMouseOver: boolean[] = [];
-  genreLabel: string[] = [];
-  genreId: string[] = [];
-
   genres: { genreLabel: string, genreId: string }[] = [];
 
   genreSelected: string ='';
 
   // genres: GenreModel[] = [];
 
-  artiste: string[] = [];
-  artisteLabel: string[] = [];
+  artistes: { artisteId : string, artisteLabel: string} [] = [];
+  // artiste: string[] = [];
+  // artisteLabel: string[] = [];
 
 
   musique: string[] = [];
@@ -42,7 +37,7 @@ export class ExploreComponent implements OnInit{
       VALUES ?genreId {
         wd:Q6010  # Rap
         wd:Q211756 # Dance-pop
-        wd:Q188450 # Jazz
+        wd:Q188450 # Electro pop
         wd:Q131272 # Soul
         wd:Q138020 #hip hop français
       }
@@ -51,7 +46,6 @@ export class ExploreComponent implements OnInit{
     }    
     `;
     this.sparqlService.queryWikidata(query1).then((data) => {
-      console.log(data);
       this.genres= data.results.bindings.map((binding: any) => {
         const genreId = binding.genreId.value;
         const genreLabel = binding.genreLabel.value;
@@ -63,7 +57,6 @@ export class ExploreComponent implements OnInit{
       // this.genreId = data.results.bindings.map((binding: any) => binding.genreId.value);
       // this.genreLabel = data.results.bindings.map((binding: any) => binding.genreLabel.value);
     });
-
 
     this.exploreByPerformer();
 
@@ -77,20 +70,26 @@ export class ExploreComponent implements OnInit{
     SELECT ?artiste ?artisteLabel
     WHERE {
       VALUES ?artiste {
-        wd:Q642477  # Booba
+        wd:Q62766  # Jay-Z
         wd:Q1744     # Madonna
         wd:Q185828     # Daft Punk
-        wd:Q55641    # Spice Girls
-        wd:Q17305712 #Burna Boy
+        wd:Q33240    # Drake
+        wd:Q36153 #Beyonce
       }
       ?artiste rdfs:label ?artisteLabel.
       FILTER(LANGMATCHES(LANG(?artisteLabel), "fr"))
     }    
     `;
-
     this.sparqlService.queryWikidata(query).then((data) => {
-      this.artisteLabel = data.results.bindings.map((binding: any) => binding.artisteLabel.value);
-      this.artiste = data.results.bindings.map((binding: any) => binding.artiste.value);
+      this.artistes= data.results.bindings.map((binding: any) => {
+        const artisteId = binding.artiste.value;
+        const artisteLabel = binding.artisteLabel.value;
+        console.log(artisteLabel)
+        return {
+          artisteId: artisteId,
+          artisteLabel: artisteLabel,
+        };
+      })
     });
 
   }
