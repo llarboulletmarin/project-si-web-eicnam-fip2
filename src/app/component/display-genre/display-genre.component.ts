@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { RecordsModel } from 'src/app/model/records.model';
 import {DomSanitizer} from "@angular/platform-browser";
@@ -14,7 +14,7 @@ import {SparqlService} from "../../service/sparql.service";
 
 //const selectGenreId = genreMapping[genreLabel];
 
-export class DisplayGenreComponent {
+export class DisplayGenreComponent implements OnInit {
 
   genreLabel: string = '';
   records: RecordsModel[] = [];

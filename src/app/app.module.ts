@@ -11,6 +11,7 @@ import { SearchComponent } from './component/search/search.component';
 import { ExploreComponent } from './component/explore/explore.component';
 import { DisplayGenreComponent } from './component/display-genre/display-genre.component';
 import { DisplayArtistComponent } from './component/display-artist/display-artist.component';
+import { DisplayLatestReleaseComponent } from './component/display-latest-release/display-latest-release.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { DisplayArtistComponent } from './component/display-artist/display-artis
     SearchComponent,
     ExploreComponent,
     DisplayGenreComponent,
-    DisplayArtistComponent
+    DisplayArtistComponent,
+    DisplayLatestReleaseComponent
   ],
   imports: [
     BrowserModule,
