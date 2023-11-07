@@ -18,7 +18,7 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     const query = `
-      SELECT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDpotify) ?countryOfOriginLabel ?publicationDate
+      SELECT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDpotify) (SAMPLE(?publicationDate) AS ?publicationDate) ?countryOfOriginLabel
       WHERE {
         ?song wdt:P31 wd:Q7366.
         ?song wdt:P175 ?artist.
@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
           bd:serviceParam wikibase:language "en".
         }
       }
-      GROUP BY ?song ?songLabel ?countryOfOriginLabel ?publicationDate
+      GROUP BY ?song ?songLabel ?countryOfOriginLabel
     `;
 
     this.sparqlService.queryWikidata(query).then((data) => {
