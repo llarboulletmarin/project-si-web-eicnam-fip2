@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import {SparqlService} from "../../service/sparql.service";
 import { ActivatedRoute } from '@angular/router';
 import {RouteConstant} from "../../constant/route.constant";
+import {DomSanitizer} from "@angular/platform-browser";
+import { RecordsModel } from 'src/app/model/records.model';
 
 @Component({
   selector: 'app-explore',
@@ -23,12 +25,15 @@ export class ExploreComponent implements OnInit{
   // artiste: string[] = [];
   // artisteLabel: string[] = [];
 
+  songs: {songID: string, songLabel: string, artistId: string, artistLabel: string, countryOfOrigin: string, spotifyID: string, publicationDate: string} [] = [];
+  
+  // records: RecordsModel[] = [];
 
-  musique: string[] = [];
-  musiqueLabel: string[] = [];
-  datePublication: string[] = [];
+  // musique: string[] = [];
+  // musiqueLabel: string[] = [];
+  // datePublication: string[] = [];
 
-  constructor(private sparqlService: SparqlService, private route: ActivatedRoute) {}
+  constructor(private sparqlService: SparqlService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
 
   ngOnInit(): void {
     const query1 = `
@@ -70,11 +75,11 @@ export class ExploreComponent implements OnInit{
     SELECT ?artiste ?artisteLabel
     WHERE {
       VALUES ?artiste {
-        wd:Q62766  # Jay-Z
+        wd:Q185002  # Mylène Farmer
         wd:Q1744     # Madonna
         wd:Q185828     # Daft Punk
-        wd:Q33240    # Drake
-        wd:Q36153 #Beyonce
+        wd:Q258693    # Lorie
+        wd:Q36153 #Beyoncé
       }
       ?artiste rdfs:label ?artisteLabel.
       FILTER(LANGMATCHES(LANG(?artisteLabel), "fr"))
@@ -84,7 +89,6 @@ export class ExploreComponent implements OnInit{
       this.artistes= data.results.bindings.map((binding: any) => {
         const artisteId = binding.artiste.value;
         const artisteLabel = binding.artisteLabel.value;
-        console.log(artisteLabel)
         return {
           artisteId: artisteId,
           artisteLabel: artisteLabel,
@@ -96,25 +100,53 @@ export class ExploreComponent implements OnInit{
 
 
   exploreNewSongs() : void {
+
       const query = `
-      SELECT ?musique ?musiqueLabel ?datePublication
+      SELECT ?song ?songLabel ?spotifyID (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (MAX(?publicationDate) AS ?latestPubDate) (SAMPLE(?countryOfOriginLabel) AS ?countryOfOriginLabel)
       WHERE {
-        ?musique wdt:P31 wd:Q7366. # Œuvre musicale
-      
-        ?musique wdt:P577 ?datePublication. # Date de publication
-      
-        ?musique rdfs:label ?musiqueLabel.
-        FILTER(LANGMATCHES(LANG(?musiqueLabel), "fr"))
+        ?song wdt:P31 wd:Q7366 ;
+              wdt:P2207 ?spotifyID ;
+              wdt:P175 ?artist;
+              wdt:P577 ?publicationDate.
+        
+        FILTER(YEAR(?publicationDate) = 2023).
+        
+        OPTIONAL {
+          ?song wdt:P495 ?countryOfOriginLabel.
+        }
+        
+        ?artist rdfs:label ?artistLabel.
+        FILTER(LANG(?artistLabel) = "en").
+                
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "en" }
       }
-      ORDER BY DESC(?datePublication)
+      GROUP BY ?song ?songLabel ?spotifyID
+      ORDER BY DESC(?latestPubDate)
       LIMIT 5
       `;
+        this.sparqlService.queryWikidata(query).then((data) => {
+          this.songs = data.results.bindings.map((binding: any) => {
+            const songID = binding.song ? binding.song.value : null;
+            const songLabel = binding.songLabel ? binding.songLabel.value : null;
+            const artistId = binding.firstArtist ? binding.firstArtist.value : null;
+            const artistLabel = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
+            const spotify = binding.spotifyID ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.spotifyID.value) : null;
+            const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
+            const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
+            return {
+              song: songID,
+              songLabel: songLabel,
+              artistId: artistId,
+              artist: artistLabel,
+              spotify: spotify,
+              countryOfOrigin: countryOfOrigin,
+              publicationDate: publicationDate,
+            }
+          });
 
-      this.sparqlService.queryWikidata(query).then((data) => {
-        this.musique = data.results.bindings.map((binding: any) => binding.musique.value);
-        this.musiqueLabel = data.results.bindings.map((binding: any) => binding.musiqueLabel.value);
-        this.datePublication = data.results.bindings.map((binding: any) => binding.datePublication.value);
-      });
+          
+
+      })
   }
 
   handleGenreCardClick(genreLabel: string) {

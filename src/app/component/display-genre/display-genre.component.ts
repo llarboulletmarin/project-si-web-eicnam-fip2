@@ -40,16 +40,13 @@ export class DisplayGenreComponent {
       this.route.queryParams.subscribe(((params) => {
         this.genreLabel = params['genreLabel'];
 
-        console.log(params["genreLabel"])
         // Recherche de l'objet correspondant dans genreMapping
         const genre = genreMapping.find(item => item.genreLabel === this.genreLabel);
 
         const dynamicID = genre?.genreId;
-        
-        console.log(dynamicID)
 
         const query = `
-        SELECT DISTINCT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDpotify) (MAX(?publicationDate) AS ?latestPubDate) ?countryOfOriginLabel ?publicationDate
+        SELECT DISTINCT ?song ?songLabel (SAMPLE(?artist) AS ?firstArtist) (SAMPLE(?artistLabel) AS ?firstArtistLabel) (SAMPLE(?spotify) AS ?IDspotify) (MAX(?publicationDate) AS ?latestPubDate) ?countryOfOriginLabel ?publicationDate
         WHERE {
           ?song wdt:P31 wd:Q7366.
           ?song wdt:P175 ?artist.
@@ -84,7 +81,7 @@ export class DisplayGenreComponent {
             const song = binding.songLabel ? binding.songLabel.value : null;
             const artistId = binding.firstArtist ? binding.firstArtist.value : null;
             const artist = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
-            const spotify = binding.IDpotify ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDpotify.value) : null;
+            const spotify = binding.IDspotify ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.IDspotify.value) : null;
             const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
             const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
             return {

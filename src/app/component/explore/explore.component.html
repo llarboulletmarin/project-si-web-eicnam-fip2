@@ -43,10 +43,10 @@
   <h1> Parcourez les nouveautés</h1>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-2" *ngFor="let r of musiqueLabel">
-            <div class="card" style="width: 200px; height: 200px; text-align: center;" (click)="handleNewSongsCardClick(r)">
+      <div class="col-2" *ngFor="let song of songs">
+            <div class="card" style="width: 200px; height: 200px; text-align: center;">
                 <div class="card-body text-center">
-                <h5 class="card-title mt-5">{{ r }}</h5>
+                <h5 class="card-title mt-5"> {{ song.songLabel }} </h5>
                 </div>
             </div>
     </div>
