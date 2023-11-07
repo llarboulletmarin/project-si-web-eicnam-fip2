@@ -43,11 +43,11 @@
   <h1> Parcourez les nouveautés</h1>
   <div class="container">
     <div class="row justify-content-center">
-      <div class="col-2" *ngFor="let song of songs">
+      <div class="col-2" *ngFor="let r of records">
             <div class="card" style="width: 200px; height: 200px; text-align: center;">
-                <a class="button" [routerLink]="'/' + RouteConstant.DISPLAY_LATEST_RELEASE" [queryParams]="{ songLabel: song.songLabel }"> {{song.songLabel}} </a>
+                <a class="button" [routerLink]="'/' + RouteConstant.DISPLAY_LATEST_RELEASE" [queryParams]="{ song: r.song }"> {{r.song}} </a>
                 <div class="card-body text-center">
-                <h5 class="card-title mt-5"> {{ song.songLabel }} </h5>
+                <h5 class="card-title mt-5"> {{ r.song }} </h5>
                 </div>
             </div>
     </div>

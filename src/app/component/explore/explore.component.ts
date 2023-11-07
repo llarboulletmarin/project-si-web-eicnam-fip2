@@ -27,7 +27,7 @@ export class ExploreComponent implements OnInit{
 
   songs: {songID: string, songLabel: string, artistId: string, artistLabel: string, countryOfOrigin: string, spotifyID: string, publicationDate: string} [] = [];
   
-  // records: RecordsModel[] = [];
+  records: RecordsModel[] = [];
 
   // musique: string[] = [];
   // musiqueLabel: string[] = [];
@@ -67,6 +67,8 @@ export class ExploreComponent implements OnInit{
 
     this.exploreNewSongs();
 
+
+    console.log(this.records);
   }
 
   exploreByPerformer() : void {
@@ -125,23 +127,25 @@ export class ExploreComponent implements OnInit{
       LIMIT 5
       `;
         this.sparqlService.queryWikidata(query).then((data) => {
-          this.songs = data.results.bindings.map((binding: any) => {
-            const songID = binding.song ? binding.song.value : null;
-            const songLabel = binding.songLabel ? binding.songLabel.value : null;
+          this.records = data.results.bindings.map((binding: any) => {
+            const songId = binding.song ? binding.song.value : null;
+            const song = binding.songLabel ? binding.songLabel.value : null;
             const artistId = binding.firstArtist ? binding.firstArtist.value : null;
-            const artistLabel = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
+            const artist = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
             const spotify = binding.spotifyID ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.spotifyID.value) : null;
             const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
             const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
             return {
-              song: songID,
-              songLabel: songLabel,
+              songId: songId,
+              song: song,
               artistId: artistId,
-              artist: artistLabel,
+              artist: artist,
               spotify: spotify,
               countryOfOrigin: countryOfOrigin,
               publicationDate: publicationDate,
             }
+
+            
           });
 
           

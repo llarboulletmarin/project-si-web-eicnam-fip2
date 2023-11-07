@@ -95,10 +95,10 @@ export class DisplayGenreComponent implements OnInit {
             }
           });
 
-          
-
       })
     }))
+
+    console.log(this.records);
   }
 
 
