@@ -85,6 +85,5 @@ export class DisplayArtistComponent implements OnInit{
     this.recordSelected = record;
   }
 
-  
 
 }

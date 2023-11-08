@@ -3,22 +3,50 @@
   </p>
 </div>
 
-<div class="container w-30 ">
-      <br>
-      <h1>Parcourez par genre</h1>
-      <br>
-      <div class="container">
-        <div class="row justify-content-center">
-          <div *ngFor="let genre of genres" class="col-2">
-                <div class="card" style="width: 200px; height: 200px; text-align: center;">
-                  <a class="button" [routerLink]="'/' + RouteConstant.DISPLAYGENRE" [queryParams]="{ genreLabel: genre.genreLabel }"> {{genre.genreLabel}} </a>
-                    <div class="card-body text-center">
-                      <button> {{ genre.genreLabel }}</button>
-                    </div>
-                </div>
+<style>
+  .genre-card {
+    width: 200px;
+    height: 200px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: all .2s ease-in-out;
+  }
+
+  .genre-card:hover {
+    background-color: #000;
+  }
+
+  .genre-card:hover .card-body {
+    color: #fff;
+  }
+
+  .genre-card .card-body {
+    color: #000;
+  }
+
+  .genre-card .card-body.display-4 {
+    font-size: 40px;
+    font-weight: bold;
+  }
+</style>
+
+<div class="container w-30">
+  <br>
+  <h1>Parcourez par genre</h1>
+  <br>
+
+  <div class="container">
+    <div class="row justify-content-center">
+      <div *ngFor="let genre of genres" class="col-2">
+        <div class="card genre-card" [routerLink]="['/' + RouteConstant.DISPLAYGENRE]" [queryParams]="{ genreLabel: genre.genreLabel }">
+          <div class="card-body d-flex align-items-center justify-content-center text-center">
+            <h4>{{ genre.genreLabel }}</h4>
           </div>
         </div>
       </div>
+    </div>
+  </div>
 </div>
  
 <div class="container w-30 ">
@@ -28,27 +56,25 @@
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-2" *ngFor="let artiste of artistes">
-              <div class="card" style="width: 200px; height: 200px; text-align: center;">
-                <a class="button" [routerLink]="'/' + RouteConstant.DISPLAYARTIST" [queryParams]="{ artisteLabel: artiste.artisteLabel }"> {{artiste.artisteLabel}} </a>
-                  <div class="card-body text-center">
-                  <h5 class="card-title mt-5">{{ artiste.artisteLabel }}</h5>
+              <div class="card genre-card" [routerLink]="'/' + RouteConstant.DISPLAYARTIST" [queryParams]="{ artisteLabel: artiste.artisteLabel }">
+                  <div class="card-body d-flex align-items-center justify-content-center text-center">
+                  <h4>{{ artiste.artisteLabel }}</h4>
                   </div>
               </div>
       </div>
     </div>
 </div>
 
-<div class="container w-30">
+<div class="container w-30" style="padding-bottom: 50px;">
   <br>
-  <h1> Parcourez les nouveautés</h1>
+  <h1 style="margin-top: 20px; margin-bottom: 30px;"> Parcourez les nouveautés</h1>
   <div class="container">
     <div class="row justify-content-center">
       <div class="col-2" *ngFor="let r of records">
-            <div class="card" style="width: 200px; height: 200px; text-align: center;">
-                <a class="button" [routerLink]="'/' + RouteConstant.DISPLAY_LATEST_RELEASE" [queryParams]="{ song: r.song }"> {{r.song}} </a>
-                <div class="card-body text-center">
-                <h5 class="card-title mt-5"> {{ r.song }}  by {{r.artist}} </h5>
-                </div>
+            <div class="card genre-card" [routerLink]="'/' + RouteConstant.DISPLAY_LATEST_RELEASE" [queryParams]="{ song: r.song }">
+              <div class="card-body d-flex align-items-center justify-content-center text-center">
+                <h4 > {{ r.song }} by  {{r.artist}}</h4>
+              </div>
             </div>
     </div>
   </div>
