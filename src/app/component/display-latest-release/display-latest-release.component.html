@@ -1,21 +1,18 @@
-
-<div class="container w-75">
-    <div class="row">
-
-          <table class="table table-hover mt-4">
-            <thead>
-            <tr>
-              <th>Titre</th>
-              <th>Artiste</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-              <td>{{record.song}}</td>
-              <td>{{record.artist}}</td>
-              <td></td>
-            </tr>
-            </tbody>
-          </table>
+<div class="container w-100" *ngFor="let r of records">
+  <div class="container w-100  justify-content-center mt-4">
+    <h1> Découvrez le titre {{r.song}} de {{r.artist}} </h1>
+    <p>{{r.countryOfOrigin}}</p>
+    <p>Publié le {{r.publicationDate | date : 'dd/MM/yyyy'}}</p>
+      <div class="d-flex justify-content-center mt-4">
+        <iframe [src]="r.spotify"
+                width="400"
+                height="200"
+                frameborder="5"
+                allowtransparency="false"
+                allow="encrypted-media">
+        </iframe>
       </div>
-      </div>
+    <h2> Info sur l'artiste </h2>
+    
+  </div>
+</div>

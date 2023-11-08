@@ -17,7 +17,7 @@ export class ExploreComponent implements OnInit{
 
   genres: { genreLabel: string, genreId: string }[] = [];
 
-  genreSelected: string ='';
+  // genreSelected: string ='';
 
   // genres: GenreModel[] = [];
 
@@ -59,16 +59,12 @@ export class ExploreComponent implements OnInit{
           genreLabel: genreLabel,
         };
       })
-      // this.genreId = data.results.bindings.map((binding: any) => binding.genreId.value);
-      // this.genreLabel = data.results.bindings.map((binding: any) => binding.genreLabel.value);
     });
 
     this.exploreByPerformer();
 
     this.exploreNewSongs();
 
-
-    console.log(this.records);
   }
 
   exploreByPerformer() : void {
@@ -128,7 +124,7 @@ export class ExploreComponent implements OnInit{
       `;
         this.sparqlService.queryWikidata(query).then((data) => {
           this.records = data.results.bindings.map((binding: any) => {
-            const songId = binding.song ? binding.song.value : null;
+            const songId = binding.song.value;
             const song = binding.songLabel ? binding.songLabel.value : null;
             const artistId = binding.firstArtist ? binding.firstArtist.value : null;
             const artist = binding.firstArtistLabel ? binding.firstArtistLabel.value : null;
@@ -144,12 +140,7 @@ export class ExploreComponent implements OnInit{
               countryOfOrigin: countryOfOrigin,
               publicationDate: publicationDate,
             }
-
-            
           });
-
-          
-
       })
   }
 

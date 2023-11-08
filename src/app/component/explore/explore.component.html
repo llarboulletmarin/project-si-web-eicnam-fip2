@@ -47,7 +47,7 @@
             <div class="card" style="width: 200px; height: 200px; text-align: center;">
                 <a class="button" [routerLink]="'/' + RouteConstant.DISPLAY_LATEST_RELEASE" [queryParams]="{ song: r.song }"> {{r.song}} </a>
                 <div class="card-body text-center">
-                <h5 class="card-title mt-5"> {{ r.song }} </h5>
+                <h5 class="card-title mt-5"> {{ r.song }}  by {{r.artist}} </h5>
                 </div>
             </div>
     </div>
