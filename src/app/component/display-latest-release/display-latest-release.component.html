@@ -1,6 +1,39 @@
-<div class="container w-100" *ngFor="let r of records">
-  <div class="container w-100  justify-content-center mt-4">
-    <h1> Découvrez le titre {{r.song}} de {{r.artist}} </h1>
+<style>
+  .display-song {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+
+  .display-song img {
+    max-width: 30%;
+    border-radius: 8px;
+  }
+
+  .artist-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  .col-img img {
+    max-width: 80%;
+    max-height: 80%;
+  }
+
+  .col-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  
+</style>
+<div class="container w-50 mb-4" *ngFor="let r of records">
+  <div class="container w-100 justify-content-center mt-4 display-song">
+    <h2> Découvrez le titre </h2>
+    <h2><span style="font-weight: bold">{{r.song}}</span> de <span style="font-weight: bold">{{r.artist}} </span></h2>
     <p>{{r.countryOfOrigin}}</p>
     <p>Publié le {{r.publicationDate | date : 'dd/MM/yyyy'}}</p>
       <div class="d-flex justify-content-center mt-4">
@@ -12,7 +45,16 @@
                 allow="encrypted-media">
         </iframe>
       </div>
-    <h2> Info sur l'artiste </h2>
-    
-  </div>
+        <div class="row mt-2">
+          <h2>Infos sur l'artiste</h2>
+          <div class="col-sm-6 mt-4 col-img">
+            <img [src]="imageUrl" alt="{{r.artist}} Image">
+          </div>
+          <div class="col-sm-6 col-info" *ngFor="let a of artistInfo">
+            <p><strong>Nom de scène:</strong> {{a.artistLabel}}</p>
+            <p><strong>ID de l'artiste:</strong> {{a.artistId}}</p>
+            <p><strong>Date de naissance:</strong> {{a.dateOfBirth}}</p>
+            <p><strong>Principale occupation:</strong> {{a.occupation}}</p>
+          </div>
+        </div>
 </div>

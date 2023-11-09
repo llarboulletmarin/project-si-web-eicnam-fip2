@@ -24,10 +24,8 @@
             </tr>
             </thead>
             <tbody>
-            <tr *ngFor="let r of records" (click)="selectRecord(r)" [ngClass]="{'table-active': r.song === recordSelected.song}" style="background-color: #000; color: #fff;"
-            onMouseOver="this.style.backgroundColor='#000'; this.style.color='#fff';"
-            onMouseOut="this.style.backgroundColor=''; this.style.color='#000';">
-              <td>{{r.song}}</td>
+            <tr *ngFor="let r of records" (click)="selectRecord(r)" [ngClass]="{'table-active': r.song === recordSelected.song}">
+              <td> {{r.song}}</td>
               <td>{{r.artist}}</td>
               <td></td>
             </tr>

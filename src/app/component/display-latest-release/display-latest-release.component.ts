@@ -1,3 +1,4 @@
+import { BindingPipe } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -17,12 +18,18 @@ export class DisplayLatestReleaseComponent implements OnInit{
   records: RecordsModel[] = [];
 
   record: RecordsModel = new RecordsModel();
+
+  imageUrl: string ='';
+
+  artistId: string ='';
+
+  artistInfo: {artistId: string, artistLabel: string, occupation: string[], dateOfBirth: string, dateOfCreation: string, nationality: string} []=[];
+
   constructor(private sparqlService: SparqlService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
 
 
   ngOnInit(): void {
 
-  
     const latestReleaseMapping = [
       { songLabel: "I'm Just Ken", songId: "Q120799552" },
       { songLabel: "Badebussen", songId: "Q121316946" },
@@ -30,7 +37,7 @@ export class DisplayLatestReleaseComponent implements OnInit{
       { songLabel: "Happy Doomsday", songId: "Q118354926" },
       { songLabel: "Six Feet Under", songId: "Q116908998" },
     ];
-    
+
    this.route.queryParams.subscribe(((params => {
 
     this.songLabel = params ['song'];
@@ -63,6 +70,12 @@ export class DisplayLatestReleaseComponent implements OnInit{
       OPTIONAL {
           wd:${dynamicID} wdt:P577 ?publicationDate .
       }
+
+      OPTIONAL {
+        ?artist wdt:P434 ?freebaseId .
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+        BIND(REPLACE(str(?artist), ".*Q", "Q") AS ?artistId)
+        }
     } 
     `
 
@@ -72,10 +85,12 @@ export class DisplayLatestReleaseComponent implements OnInit{
           const song = binding.songLabel ? binding.songLabel.value : null;
           const artistId = binding.artistId ? binding.artistId.value : null;
           const artist = binding.artistLabel ? binding.artistLabel.value : null;
-          console.log(artist)
           const spotify = binding.spotifyID ? this.sanitizer.bypassSecurityTrustResourceUrl("https://open.spotify.com/embed/track/" + binding.spotifyID.value) : null;
           const countryOfOrigin = binding.countryOfOriginLabel ? binding.countryOfOriginLabel.value : null;
           const publicationDate = binding.publicationDate ? binding.publicationDate.value : null;
+          const image = binding.image ? binding.image.value : null;
+          this.imageUrl = image;
+          this.artistId = artistId;
           return {
             songId: songId,
             song: song,
@@ -87,12 +102,48 @@ export class DisplayLatestReleaseComponent implements OnInit{
           }
         });
 
+        console.log(this.artistId);
+        const isBand = this.artistId.startsWith("Q27" || "Q18");
+
+        const dateProp = isBand ? "wdt:P571" : "wdt:P569";
+      
+        const dateQuery = `
+          SELECT ?date ${isBand ? "" : "?occupationLabel"} ?artistLabel ?nationality 
+          WHERE {
+            wd:${this.artistId} ${dateProp} ?date.
+            ${isBand ? "" : `wd:${this.artistId} wdt:P106 ?occupation. ?occupation rdfs:label ?occupationLabel filter(lang(?occupationLabel) = "en").`}
+            wd:${this.artistId}  wdt:P27 ?nationality .
+            ?nationality rdfs:label ?nationalityLabel filter(lang(?nationalityLabel) = "en").
+          }
+        `;
+
+        this.sparqlService.queryWikidata(dateQuery).then((data) => {
+
+          this.artistInfo.push({ artistId: "", artistLabel: "", occupation: [], dateOfBirth: "", dateOfCreation: "", nationality: ""});
+
+          if (data.results.bindings.length) {
+            this.artistInfo[0].artistId = this.artistId;
+            this.artistInfo[0].artistLabel = data.results.bindings[0].artistLabel?.value || "";
+            if (isBand) {
+              // Si l'artiste est un groupe de musique, affectez la date à la propriété dateOfCreation
+              this.artistInfo[0].dateOfCreation = data.results.bindings[0].date.value;
+              
+              console.log(this.artistInfo);
+            } else {
+              this.artistInfo[0].dateOfBirth = data.results.bindings[0].date.value;
+              this.artistInfo[0].occupation = data.results.bindings[0].occupationLabel?.value || "";
+              // this.artistInfo[0].nationality = data.results.bindings[0].countryOfOriginLabel?.value || "";
+              this.artistInfo[0].nationality = data.results.bindings[0].nationality?.value;
+              console.log(this.artistInfo);
+            }
+          }
+        });
+
     })
 
-    })))
-
-    // console.log(this.record.artist);
-
+    })
+    
+    ))
 
   }
 
