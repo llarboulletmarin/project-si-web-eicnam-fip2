@@ -103,17 +103,23 @@ export class DisplayLatestReleaseComponent implements OnInit{
         });
 
         console.log(this.artistId);
+
         const isBand = this.artistId.startsWith("Q27" || "Q18");
 
+        console.log(isBand);
+        
         const dateProp = isBand ? "wdt:P571" : "wdt:P569";
       
         const dateQuery = `
-          SELECT ?date ${isBand ? "" : "?occupationLabel"} ?artistLabel ?nationality 
+          SELECT ?date ${isBand ? "" : "?occupationLabel"} ?artistLabel ?nationality ?nationalityLabel
           WHERE {
-            wd:${this.artistId} ${dateProp} ?date.
-            ${isBand ? "" : `wd:${this.artistId} wdt:P106 ?occupation. ?occupation rdfs:label ?occupationLabel filter(lang(?occupationLabel) = "en").`}
-            wd:${this.artistId}  wdt:P27 ?nationality .
-            ?nationality rdfs:label ?nationalityLabel filter(lang(?nationalityLabel) = "en").
+
+            ${isBand ? `  wd:${this.artistId} ${dateProp} ?date. wd:Q27554412 wdt:P495 ?country_of_origin. SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }` : `wd:${this.artistId} ${dateProp} ?date. wd:${this.artistId} wdt:P27 ?nationality . ?nationality rdfs:label ?nationalityLabel filter(lang(?nationalityLabel) = "fr" || lang(?nationalityLabel) = "en").`}
+
+
+            wd:${this.artistId} rdfs:label ?artistLabel filter(lang(?artistLabel) = "en").
+            ${isBand ? "" : `wd:${this.artistId} wdt:P106 ?occupation. ?occupation rdfs:label ?occupationLabel filter(lang(?occupationLabel) = "fr").`}
+            
           }
         `;
 
@@ -127,14 +133,13 @@ export class DisplayLatestReleaseComponent implements OnInit{
             if (isBand) {
               // Si l'artiste est un groupe de musique, affectez la date à la propriété dateOfCreation
               this.artistInfo[0].dateOfCreation = data.results.bindings[0].date.value;
-              
+              this.artistInfo[0].nationality = data.results.bindings[0].nationalityLabel?.value || "";
               console.log(this.artistInfo);
             } else {
               this.artistInfo[0].dateOfBirth = data.results.bindings[0].date.value;
               this.artistInfo[0].occupation = data.results.bindings[0].occupationLabel?.value || "";
               // this.artistInfo[0].nationality = data.results.bindings[0].countryOfOriginLabel?.value || "";
-              this.artistInfo[0].nationality = data.results.bindings[0].nationality?.value;
-              console.log(this.artistInfo);
+              this.artistInfo[0].nationality = data.results.bindings[0].nationalityLabel?.value;
             }
           }
         });

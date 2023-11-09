@@ -53,7 +53,8 @@
           <div class="col-sm-6 col-info" *ngFor="let a of artistInfo">
             <p><strong>Nom de scène:</strong> {{a.artistLabel}}</p>
             <p><strong>ID de l'artiste:</strong> {{a.artistId}}</p>
-            <p><strong>Date de naissance:</strong> {{a.dateOfBirth}}</p>
+            <p><strong>Date de naissance:</strong> {{a.dateOfBirth | date : 'dd/MM/yyyy'}}</p>
+            <p><strong>Nationnalité:</strong> {{a.nationality}}</p>
             <p><strong>Principale occupation:</strong> {{a.occupation}}</p>
           </div>
         </div>
