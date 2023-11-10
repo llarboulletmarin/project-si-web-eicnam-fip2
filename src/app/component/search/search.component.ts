@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import { Component } from '@angular/core';
 import {SparqlService} from "../../service/sparql.service";
 import {DomSanitizer} from "@angular/platform-browser";
 import {RecordsModel} from "../../model/records.model";
