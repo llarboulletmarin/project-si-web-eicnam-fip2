@@ -1,6 +1,19 @@
+<style>
+  .selected-song {
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  table.table-hover>tbody>tr:hover > td {
+      color: #fff;
+      background-color: #000;
+    }
+  </style>
 
-<div class="container w-75">
-  <input type="text" class="form-control mt-4" placeholder="Titre chanson" (keyup)="filterResultsBySong($event)">
+<div class="container w-75 mt-4">
+  <h1> Recherchez un titre </h1>
+  <input type="text" class="form-control mt-4" placeholder="Entrez un titre" (keyup)="filterResultsBySong($event)">
   <div class="row">
       <div [ngClass]="{'container w-100': !recordSelected.song, 'container w-50': recordSelected.song}">
         <table class="table table-hover mt-4">
@@ -19,16 +32,16 @@
           </tbody>
         </table>
     </div>
-    <div class="container w-50" *ngIf="recordSelected.song">
+    <div class="container w-50 selected-song" *ngIf="recordSelected.song">
       <div class="container w-100 mt-4">
         <h3>{{recordSelected.song}}</h3>
-        <h4>{{recordSelected.artist}}</h4>
+        <p> Un single de <span style="font-weight: bold">{{recordSelected.artist}}</span></p>
         <p>{{recordSelected?.countryOfOrigin}}</p>
         <p>{{recordSelected?.publicationDate | date : 'dd/MM/yyyy'}}</p>
-          <div class="d-flex justify-content-start mt-4" *ngIf="recordSelected.spotify">
+          <div class="d-flex justify-content-center mt-4" *ngIf="recordSelected.spotify">
             <iframe [src]="recordSelected.spotify"
                     width="300"
-                    height="80"
+                    height="200"
                     frameborder="0"
                     allowtransparency="false"
                     allow="encrypted-media">
