@@ -23,7 +23,7 @@ export class DisplayLatestReleaseComponent implements OnInit{
 
   artistId: string ='';
 
-  artistInfo: {artistId: string, artistLabel: string, occupation: string[], dateOfBirth: string, dateOfCreation: string, nationality: string} []=[];
+  artistInfo: {artistId: string, artistLabel: string, occupation: "", dateOfBirth: string, dateOfCreation: string, nationality: string} []=[];
 
   constructor(private sparqlService: SparqlService, private route: ActivatedRoute, private sanitizer: DomSanitizer) {}
 
@@ -102,11 +102,7 @@ export class DisplayLatestReleaseComponent implements OnInit{
           }
         });
 
-        console.log(this.artistId);
-
         const isBand = this.artistId.startsWith("Q27" || "Q18");
-
-        console.log(isBand);
         
         const dateProp = isBand ? "wdt:P571" : "wdt:P569";
       
@@ -114,7 +110,7 @@ export class DisplayLatestReleaseComponent implements OnInit{
           SELECT ?date ${isBand ? "" : "?occupationLabel"} ?artistLabel ?nationality ?nationalityLabel
           WHERE {
 
-            ${isBand ? `  wd:${this.artistId} ${dateProp} ?date. wd:Q27554412 wdt:P495 ?country_of_origin. SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }` : `wd:${this.artistId} ${dateProp} ?date. wd:${this.artistId} wdt:P27 ?nationality . ?nationality rdfs:label ?nationalityLabel filter(lang(?nationalityLabel) = "fr" || lang(?nationalityLabel) = "en").`}
+            ${isBand ? `  wd:${this.artistId} ${dateProp} ?date. wd:Q27554412 wdt:P495 ?nationalityLabel. SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }` : `wd:${this.artistId} ${dateProp} ?date. wd:${this.artistId} wdt:P27 ?nationality . ?nationality rdfs:label ?nationalityLabel filter(lang(?nationalityLabel) = "fr" || lang(?nationalityLabel) = "en").`}
 
 
             wd:${this.artistId} rdfs:label ?artistLabel filter(lang(?artistLabel) = "en").
@@ -125,11 +121,12 @@ export class DisplayLatestReleaseComponent implements OnInit{
 
         this.sparqlService.queryWikidata(dateQuery).then((data) => {
 
-          this.artistInfo.push({ artistId: "", artistLabel: "", occupation: [], dateOfBirth: "", dateOfCreation: "", nationality: ""});
+          this.artistInfo.push({ artistId: "", artistLabel: "", occupation: "", dateOfBirth: "", dateOfCreation: "", nationality: ""});
 
           if (data.results.bindings.length) {
             this.artistInfo[0].artistId = this.artistId;
             this.artistInfo[0].artistLabel = data.results.bindings[0].artistLabel?.value || "";
+
             if (isBand) {
               // Si l'artiste est un groupe de musique, affectez la date à la propriété dateOfCreation
               this.artistInfo[0].dateOfCreation = data.results.bindings[0].date.value;

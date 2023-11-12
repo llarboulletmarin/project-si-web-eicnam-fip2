@@ -39,6 +39,7 @@ export class SearchComponent implements OnInit {
         }
       }
       GROUP BY ?song ?songLabel ?countryOfOriginLabel
+      LIMIT 80
     `;
 
     this.sparqlService.queryWikidata(query).then((data) => {
